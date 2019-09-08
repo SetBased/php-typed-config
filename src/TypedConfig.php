@@ -21,7 +21,6 @@ class TypedConfig
   private $config;
 
   //--------------------------------------------------------------------------------------------------------------------
-
   /**
    * TypedConfig constructor.
    *
@@ -56,6 +55,28 @@ class TypedConfig
   public function getConfig(): Config
   {
     return $this->config;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the value of a mandatory nested configuration setting.
+   *
+   * @param string     $key     The key of the configuration setting. The key might be nested using dot notation.
+   * @param array|null $default The default value.
+   *
+   * @return array
+   *
+   * @throws TypedConfigException
+   */
+  public function getManArray(string $key, ?array $default = null): array
+  {
+    $value = $this->config->get($key, $default);
+    if (is_array($value))
+    {
+      return $value;
+    }
+
+    throw self::createException($key, 'array', $value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -176,6 +197,28 @@ class TypedConfig
     {
       throw self::createException($key, 'string', $value);
     }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the value of an optional nested configuration setting.
+   *
+   * @param string     $key     The key of the configuration setting. The key might be nested using dot notation.
+   * @param array|null $default The default value.
+   *
+   * @return array|null
+   *
+   * @throws TypedConfigException
+   */
+  public function getOptArray(string $key, ?array $default = null): ?array
+  {
+    $value = $this->config->get($key, $default);
+    if ($value===null || is_array($value))
+    {
+      return $value;
+    }
+
+    throw self::createException($key, 'array', $value);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

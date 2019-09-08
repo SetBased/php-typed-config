@@ -30,6 +30,21 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Data provider for invalid mandatory arrays.
+   *
+   * @return array
+   */
+  public function invalidManArrayCases(): array
+  {
+    $cases = $this->invalidOptArrayCases();
+
+    $cases[] = ['null.array', null];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Data provider for invalid mandatory booleans.
    *
    * @return array
@@ -101,6 +116,17 @@ class TypedConfigTest extends TestCase
     $cases[] = ['null.string', null];
 
     return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for invalid optional arrays.
+   *
+   * @return array
+   */
+  public function invalidOptArrayCases(): array
+  {
+    return [['invalid.array', null]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -180,6 +206,21 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test case for invalid mandatory array.
+   *
+   * @param string     $key     The key.
+   * @param array|null $default The default value.
+   *
+   * @dataProvider invalidManArrayCases
+   */
+  public function testInvalidArrayBool(string $key, ?array $default): void
+  {
+    $this->expectException(TypedConfigException::class);
+    $this->typeConfig->getManArray($key, $default);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test case for invalid mandatory boolean.
    *
    * @param string    $key     The key.
@@ -251,6 +292,21 @@ class TypedConfigTest extends TestCase
   {
     $this->expectException(TypedConfigException::class);
     $this->typeConfig->getManString($key, $default);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test case for invalid optional array.
+   *
+   * @param string     $key     The key.
+   * @param array|null $default The default value.
+   *
+   * @dataProvider invalidOptArrayCases
+   */
+  public function testInvalidOptArray(string $key, ?array $default): void
+  {
+    $this->expectException(TypedConfigException::class);
+    $this->typeConfig->getOptArray($key, $default);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -346,6 +402,22 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test case for mandatory array.
+   *
+   * @param string     $key      The key.
+   * @param array|null $default  The default value.
+   * @param array|null $expected The expected value.
+   *
+   * @dataProvider validManArrayCases
+   */
+  public function testValidManArray(string $key, ?array $default, ?array $expected): void
+  {
+    $value = $this->typeConfig->getManArray($key, $default);
+    self::assertSame($value, $expected);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test case for mandatory boolean.
    *
    * @param string    $key      The key.
@@ -389,6 +461,22 @@ class TypedConfigTest extends TestCase
   public function testValidManFloat(string $key, ?float $default, ?float $expected): void
   {
     $value = $this->typeConfig->getManFloat($key, $default);
+    self::assertSame($value, $expected);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test case for optional array.
+   *
+   * @param string     $key      The key.
+   * @param array|null $default  The default value.
+   * @param array|null $expected The expected value.
+   *
+   * @dataProvider validOptArrayCases
+   */
+  public function testValidOptArray(string $key, ?array $default, ?array $expected): void
+  {
+    $value = $this->typeConfig->getOptArray($key, $default);
     self::assertSame($value, $expected);
   }
 
@@ -490,6 +578,18 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Data provider for valid mandatory arrays.
+   *
+   * @return array
+   */
+  public function validManArrayCases(): array
+  {
+    return [['valid-array', null, ['one' => '1', 'two' => '2', 'three' => '3']],
+            ['null.array', [], []]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Data provider for valid mandatory booleans.
    *
    * @return array
@@ -549,6 +649,21 @@ class TypedConfigTest extends TestCase
   {
     return [['valid.string', null, 'Hello, world!'],
             ['null.string', 'default', 'default']];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid optional arrays.
+   *
+   * @return array
+   */
+  public function validOptArrayCases(): array
+  {
+    $cases = $this->validManArrayCases();
+
+    $cases[] = ['null.array', null, null];
+
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------

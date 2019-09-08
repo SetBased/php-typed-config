@@ -40,7 +40,7 @@ class TypedConfigException extends \RuntimeException
       return sprintf("Empty mandatory %s value found for key '%s'", $type, $key);
     }
 
-    $a = ($type=='integer') ? 'an' : 'a';
+    $a = (in_array($type, ['array', 'integer'])) ? 'an' : 'a';
 
     if (Cast::isManString($value))
     {
