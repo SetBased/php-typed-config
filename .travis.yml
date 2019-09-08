@@ -1,0 +1,13 @@
+language: php
+php:
+  - '7.1'
+  - '7.2'
+  - '7.3'
+
+install:
+  - rm -f composer.lock
+  - composer self-update
+  - composer update
+
+script:
+  - ./bin/phing unit

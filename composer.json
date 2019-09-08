@@ -1,0 +1,38 @@
+{
+  "name": "setbased/typed-config",
+  "description": "A lightweight and strong typed that supports PHP, INI, XML, JSON, and YAML files",
+  "keywords": [
+    "strong typed",
+    "configuration",
+    "config",
+    "json",
+    "yaml",
+    "yml",
+    "ini",
+    "xml"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.1.0",
+    "hassankhan/config": "^2.0.0",
+    "setbased/helper-cast": "^1.2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0.0 || ^8.0.0",
+    "setbased/phing-extensions": "^2.0.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "SetBased\\Config\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SetBased\\Config\\Test\\": "test/"
+    }
+  },
+  "config": {
+    "bin-dir": "bin/"
+  }
+}

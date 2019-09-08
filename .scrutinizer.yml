@@ -1,0 +1,12 @@
+build:
+    dependencies:
+        override:
+            - composer install --no-interaction
+
+    tests:
+        override:
+            -
+                command: './bin/phing unit'
+                coverage:
+                    file: 'test/coverage.xml'
+                    format: 'php-clover'
