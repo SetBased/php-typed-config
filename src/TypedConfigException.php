@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace SetBased\Config;
 
-use SetBased\Abc\Helper\Cast;
+use SetBased\Helper\Cast;
 
 /**
  * Strong typed configuration exception.

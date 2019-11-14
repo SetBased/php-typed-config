@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace SetBased\Config;
 
 use Noodlehaus\Config;
-use SetBased\Abc\Helper\Cast;
-use SetBased\Abc\Helper\InvalidCastException;
+use SetBased\Helper\Cast;
+use SetBased\Helper\InvalidCastException;
 
 /**
  * A strong typed configuration reader and writer.
