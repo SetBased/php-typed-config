@@ -4,9 +4,11 @@
 /bin/phpunit
 /build/
 /composer.lock
+/custom.task.properties
+/custom.type.properties
 /doc/
-/test/coverage.xml
 /test/MySql/etc/routines.json
 /test/MySql/etc/stratum.cfg
+/test/coverage.xml
 /test/report/
 /vendor/
