@@ -8,6 +8,8 @@ build:
   environment:
     php:
       version: '7.4'
+      pecl_extensions:
+        - inotify
 
   nodes:
     analysis:
@@ -15,13 +17,13 @@ build:
         override:
           - php-scrutinizer-run
 
-    dependencies:
-    override:
-      - composer install --no-interaction
-
-    tests:
-      override:
-        - command: './bin/phing unit'
-          coverage:
-            file:   'test/coverage.xml'
-            format: 'php-clover'
+    coverage:
+      tests:
+        before:
+          - export PLAISIO_CONFIG_DIR=test
+          - ./bin/phing kernel
+        override:
+          - command: './bin/phing unit'
+            coverage:
+              file:   'test/coverage.xml'
+              format: 'php-clover'
