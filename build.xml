@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="php-stratum" default="build" basedir=".">
-    <taskdef name="ReadSemanticVersion" classname="\SetBased\Phing\Task\ReadSemanticVersionTask"/>
-    <property name="VERSION" value="0.0.0"/>
-
     <target name="build">
-        <echo message="noting to do."/>
+        <echo message="Noting to do."/>
     </target>
 
     <!-- Run composer update and executes various other updates -->
@@ -24,29 +21,6 @@
             <arg value="outdated"/>
             <arg value="--direct"/>
         </exec>
-    </target>
-    <!-- Creates a new version/release. -->
-    <target name="version">
-        <ReadSemanticVersion file=".version"
-                             versionProperty="VERSION"
-                             haltOnError="true"/>
-        <!-- Set version of application. -->
-        <reflexive>
-            <fileset dir=".">
-                <include name="src/Application/Stratum.php"/>
-            </fileset>
-            <filterchain>
-                <replaceregexp>
-                    <regexp pattern="parent::__construct\('stratum', .*"
-                            replace="parent::__construct('stratum', '${VERSION}');"/>
-                </replaceregexp>
-            </filterchain>
-        </reflexive>
-
-        <gitcommit repository="." message="Release: ${VERSION}" allFiles="true"/>
-        <gitpush repository="."/>
-        <gittag repository="." name="${VERSION}"/>
-        <gitpush repository="." refspec="${VERSION}" quiet="false"/>
     </target>
 
     <!-- Runs all unit tests -->

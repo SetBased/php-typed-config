@@ -22,8 +22,7 @@
   "prefer-stable": true,
   "require-dev": {
     "phing/phing": "^3.0.0-RC3",
-    "phpunit/phpunit": "^9.5.27",
-    "setbased/phing-extensions": "3.0.1"
+    "phpunit/phpunit": "^9.5.27"
   },
   "autoload": {
     "psr-4": {
