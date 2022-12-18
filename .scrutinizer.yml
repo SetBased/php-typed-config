@@ -1,12 +1,27 @@
+filter:
+  dependency_paths:
+    - "vendor/"
+  excluded_paths:
+    - 'test/'
+
 build:
-    dependencies:
+  environment:
+    php:
+      version: '7.4'
+
+  nodes:
+    analysis:
+      tests:
         override:
-            - composer install --no-interaction
+          - php-scrutinizer-run
+
+    dependencies:
+    override:
+      - composer install --no-interaction
 
     tests:
-        override:
-            -
-                command: './bin/phing unit'
-                coverage:
-                    file: 'test/coverage.xml'
-                    format: 'php-clover'
+      override:
+        - command: './bin/phing unit'
+          coverage:
+            file:   'test/coverage.xml'
+            format: 'php-clover'
