@@ -26,8 +26,9 @@ This package is a wrapper around [hassankhan/config](https://github.com/hassankh
 <td>
 <a href="https://packagist.org/packages/setbased/typed-config"><img src="https://poser.pugx.org/setbased/typed-config/v/stable" alt="Latest Stable Version"/></a><br/>
 </td>
-<td><a href="https://travis-ci.org/SetBased/php-typed-config"><img src="https://travis-ci.org/SetBased/php-typed-config.svg?branch=master" alt="Build Status"/></a><br/>
-<a href="https://scrutinizer-ci.com/g/SetBased/php-typed-config/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-typed-config/badges/coverage.png?b=master" alt="Code Coverage"/></a><br/>
+<td>
+<a href="https://github.com/SetBased/php-typed-config/actions/workflows/unit.yml"><img src="https://github.com/SetBased/php-typed-config/actions/workflows/unit.yml/badge.svg" alt="Build Status"/></a><br/>
+<a href="https://codecov.io/gh/SetBased/php-typed-config"><img src="https://codecov.io/gh/SetBased/php-typed-config/branch/master/graph/badge.svg" alt="Code Coverage"/></a>
 </td>
 <td>
 <a href="https://scrutinizer-ci.com/g/SetBased/php-typed-config/?branch=master"><img src="https://scrutinizer-ci.com/g/SetBased/php-typed-config/badges/quality-score.png?b=master" alt="Scrutinizer Code Quality"/></a>
