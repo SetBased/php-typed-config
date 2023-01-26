@@ -33,7 +33,7 @@ class TypedConfigException extends \RuntimeException
    *
    * @return string The error message.
    */
-  private static function message(string $key, string $type, $value): string
+  private static function message(string $key, string $type, mixed $value): string
   {
     if ($value===null)
     {

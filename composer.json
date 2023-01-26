@@ -14,15 +14,15 @@
   "type": "library",
   "license": "MIT",
   "require": {
-    "php": ">=7.4",
-    "hassankhan/config": "^3.0.1",
-    "setbased/helper-cast": "^2.1.1"
+    "php": ">=8.1",
+    "hassankhan/config": "^3.1.0",
+    "setbased/helper-cast": "^3.0.0"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require-dev": {
-    "phing/phing": "^3.0.0-RC3",
-    "phpunit/phpunit": "^9.5.27"
+    "phing/phing": "^3.0.0-RC4",
+    "phpunit/phpunit": "^9.5.28"
   },
   "autoload": {
     "psr-4": {

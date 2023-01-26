@@ -19,14 +19,14 @@ class TypedConfigTest extends TestCase
    *
    * @var Config
    */
-  private $config;
+  private Config $config;
 
   /**
    * The configuration reader for testing.
    *
    * @var TypedConfig
    */
-  private $typeConfig;
+  private TypedConfig $typeConfig;
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -64,9 +64,9 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidManFiniteFloatCases(): array
+  public function invalidManFloatCases(): array
   {
-    $cases = $this->invalidOptFiniteFloatCases();
+    $cases = $this->invalidOptCases();
 
     $cases[] = ['null.finite-float', null];
 
@@ -75,15 +75,15 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Data provider for invalid mandatory  floats.
+   * Data provider for invalid mandatory floats including NaN, -INF, and INF.
    *
    * @return array
    */
-  public function invalidManFloatCases(): array
+  public function invalidManFloatInclusiveCases(): array
   {
-    $cases = $this->invalidOptFloatCases();
+    $cases = $this->invalidOptFloatInclusiveCases();
 
-    $cases[] = ['null.float', null];
+    $cases[] = ['null.float-inclusive', null];
 
     return $cases;
   }
@@ -146,20 +146,20 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptFiniteFloatCases(): array
+  public function invalidOptCases(): array
   {
     return [['invalid.finite-float', null]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Data provider for invalid optional floats.
+   * Data provider for invalid optional floats including NaN, -INF, and INF.
    *
    * @return array
    */
-  public function invalidOptFloatCases(): array
+  public function invalidOptFloatInclusiveCases(): array
   {
-    return [['invalid.float', null]];
+    return [['invalid.float-inclusive', null]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -241,27 +241,27 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidManFiniteFloatCases
-   */
-  public function testInvalidManFiniteFloat(string $key, ?int $default): void
-  {
-    $this->expectException(TypedConfigException::class);
-    $this->typeConfig->getManFiniteFloat($key, $default);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test case for invalid mandatory float.
-   *
-   * @param string   $key     The key.
-   * @param int|null $default The default value.
-   *
    * @dataProvider invalidManFloatCases
    */
   public function testInvalidManFloat(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
     $this->typeConfig->getManFloat($key, $default);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test case for invalid mandatory float including NaN, -INF, and INF.
+   *
+   * @param string   $key     The key.
+   * @param int|null $default The default value.
+   *
+   * @dataProvider invalidManFloatInclusiveCases
+   */
+  public function testInvalidManFloatInclusive(string $key, ?int $default): void
+  {
+    $this->expectException(TypedConfigException::class);
+    $this->typeConfig->getManFloatInclusive($key, $default);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -331,27 +331,27 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidOptFiniteFloatCases
-   */
-  public function testInvalidOptFiniteFloat(string $key, ?int $default): void
-  {
-    $this->expectException(TypedConfigException::class);
-    $this->typeConfig->getOptFiniteFloat($key, $default);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test case for invalid optional float.
-   *
-   * @param string   $key     The key.
-   * @param int|null $default The default value.
-   *
-   * @dataProvider invalidOptFloatCases
+   * @dataProvider invalidOptCases
    */
   public function testInvalidOptFloat(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
     $this->typeConfig->getOptFloat($key, $default);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test case for invalid optional float including NaN, -INF, and INF.
+   *
+   * @param string   $key     The key.
+   * @param int|null $default The default value.
+   *
+   * @dataProvider invalidOptFloatInclusiveCases
+   */
+  public function testInvalidOptFloatInclusive(string $key, ?int $default): void
+  {
+    $this->expectException(TypedConfigException::class);
+    $this->typeConfig->getOptFloatInclusive($key, $default);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -440,27 +440,27 @@ class TypedConfigTest extends TestCase
    * @param float|null $default  The default value.
    * @param float|null $expected The expected value.
    *
-   * @dataProvider validManFiniteFloatCases
-   */
-  public function testValidManFiniteFloat(string $key, ?float $default, ?float $expected): void
-  {
-    $value = $this->typeConfig->getManFiniteFloat($key, $default);
-    self::assertSame($value, $expected);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test case for mandatory float.
-   *
-   * @param string     $key      The key.
-   * @param float|null $default  The default value.
-   * @param float|null $expected The expected value.
-   *
    * @dataProvider validManFloatCases
    */
   public function testValidManFloat(string $key, ?float $default, ?float $expected): void
   {
     $value = $this->typeConfig->getManFloat($key, $default);
+    self::assertSame($value, $expected);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test case for mandatory float including NaN, -INF, and INF.
+   *
+   * @param string     $key      The key.
+   * @param float|null $default  The default value.
+   * @param float|null $expected The expected value.
+   *
+   * @dataProvider validManFloatInclusiveCases
+   */
+  public function testValidManFloatInclusive(string $key, ?float $default, ?float $expected): void
+  {
+    $value = $this->typeConfig->getManFloatInclusive($key, $default);
     self::assertSame($value, $expected);
   }
 
@@ -504,27 +504,27 @@ class TypedConfigTest extends TestCase
    * @param float|null $default  The default value.
    * @param float|null $expected The expected value.
    *
-   * @dataProvider validOptFiniteFloatCases
-   */
-  public function testValidOptFiniteFloat(string $key, ?float $default, ?float $expected): void
-  {
-    $value = $this->typeConfig->getOptFiniteFloat($key, $default);
-    self::assertSame($value, $expected);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Test case for optional float.
-   *
-   * @param string     $key      The key.
-   * @param float|null $default  The default value.
-   * @param float|null $expected The expected value.
-   *
    * @dataProvider validOptFloatCases
    */
   public function testValidOptFloat(string $key, ?float $default, ?float $expected): void
   {
     $value = $this->typeConfig->getOptFloat($key, $default);
+    self::assertSame($value, $expected);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test case for optional float including NaN, -INF, and INF.
+   *
+   * @param string     $key      The key.
+   * @param float|null $default  The default value.
+   * @param float|null $expected The expected value.
+   *
+   * @dataProvider validOptFloatInclusiveCases
+   */
+  public function testValidOptFloatInclusive(string $key, ?float $default, ?float $expected): void
+  {
+    $value = $this->typeConfig->getOptFloatInclusive($key, $default);
     self::assertSame($value, $expected);
   }
 
@@ -606,23 +606,23 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function validManFiniteFloatCases(): array
+  public function validManFloatCases(): array
   {
     return [['valid.finite-float', null, 3.14],
-            ['null.float', 2.7, 2.7]];
+            ['null.float-inclusive', 2.7, 2.7]];
   }
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Data provider for valid mandatory floats.
+   * Data provider for valid mandatory floats including NaN, -INF, and INF.
    *
    * @return array
    */
-  public function validManFloatCases(): array
+  public function validManFloatInclusiveCases(): array
   {
-    $cases = $this->validManFiniteFloatCases();
+    $cases = $this->validManFloatCases();
 
-    // $cases[] = ['valid.float', null, INF];
+    $cases[] = ['valid.float-inclusive', null, INF];
 
     return $cases;
   }
@@ -687,9 +687,9 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function validOptFiniteFloatCases(): array
+  public function validOptFloatCases(): array
   {
-    $cases = $this->validManFiniteFloatCases();
+    $cases = $this->validManFloatCases();
 
     $cases[] = ['null.finite-float', null, null];
 
@@ -698,15 +698,15 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Data provider for valid optional floats.
+   * Data provider for valid optional floats including NaN, -INF, and INF.
    *
    * @return array
    */
-  public function validOptFloatCases(): array
+  public function validOptFloatInclusiveCases(): array
   {
-    $cases = $this->validManFloatCases();
+    $cases = $this->validManFloatInclusiveCases();
 
-    $cases[] = ['null.float', null, null];
+    $cases[] = ['null.float-inclusive', null, null];
 
     return $cases;
   }

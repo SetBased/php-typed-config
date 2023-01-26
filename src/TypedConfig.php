@@ -18,7 +18,7 @@ class TypedConfig
    *
    * @var Config
    */
-  private $config;
+  private Config $config;
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
@@ -41,7 +41,7 @@ class TypedConfig
    *
    * @return TypedConfigException
    */
-  private static function createException(string $key, string $type, $value): TypedConfigException
+  private static function createException(string $key, string $type, mixed $value): TypedConfigException
   {
     return new TypedConfigException($key, $type, $value);
   }
@@ -114,30 +114,6 @@ class TypedConfig
    *
    * @throws TypedConfigException
    */
-  public function getManFiniteFloat(string $key, ?float $default = null): float
-  {
-    $value = $this->config->get($key, $default);
-    try
-    {
-      return Cast::toManFiniteFloat($value);
-    }
-    catch (InvalidCastException $exception)
-    {
-      throw self::createException($key, 'finite float', $value);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns the value of a mandatory float configuration setting.
-   *
-   * @param string     $key     The key of the configuration setting. The key might be nested using dot notation.
-   * @param float|null $default The default value.
-   *
-   * @return float
-   *
-   * @throws TypedConfigException
-   */
   public function getManFloat(string $key, ?float $default = null): float
   {
     $value = $this->config->get($key, $default);
@@ -147,7 +123,31 @@ class TypedConfig
     }
     catch (InvalidCastException $exception)
     {
-      throw self::createException($key, 'float', $value);
+      throw self::createException($key, 'finite float', $value);
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the value of a mandatory float including NaN, -INF, and INF configuration setting.
+   *
+   * @param string     $key     The key of the configuration setting. The key might be nested using dot notation.
+   * @param float|null $default The default value.
+   *
+   * @return float
+   *
+   * @throws TypedConfigException
+   */
+  public function getManFloatInclusive(string $key, ?float $default = null): float
+  {
+    $value = $this->config->get($key, $default);
+    try
+    {
+      return Cast::toManFloatInclusive($value);
+    }
+    catch (InvalidCastException $exception)
+    {
+      throw self::createException($key, 'float inclusive', $value);
     }
   }
 
@@ -256,30 +256,6 @@ class TypedConfig
    *
    * @throws TypedConfigException
    */
-  public function getOptFiniteFloat(string $key, ?float $default = null): ?float
-  {
-    $value = $this->config->get($key, $default);
-    try
-    {
-      return Cast::toOptFiniteFloat($value);
-    }
-    catch (InvalidCastException $exception)
-    {
-      throw self::createException($key, 'finite float', $value);
-    }
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Returns the value of an optional float configuration setting.
-   *
-   * @param string     $key     The key of the configuration setting. The key might be nested using dot notation.
-   * @param float|null $default The default value.
-   *
-   * @return float|null
-   *
-   * @throws TypedConfigException
-   */
   public function getOptFloat(string $key, ?float $default = null): ?float
   {
     $value = $this->config->get($key, $default);
@@ -289,7 +265,31 @@ class TypedConfig
     }
     catch (InvalidCastException $exception)
     {
-      throw self::createException($key, 'float', $value);
+      throw self::createException($key, 'finite float', $value);
+    }
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the value of an optional float including NaN, -INF, and INF configuration setting.
+   *
+   * @param string     $key     The key of the configuration setting. The key might be nested using dot notation.
+   * @param float|null $default The default value.
+   *
+   * @return float|null
+   *
+   * @throws TypedConfigException
+   */
+  public function getOptFloatInclusive(string $key, ?float $default = null): ?float
+  {
+    $value = $this->config->get($key, $default);
+    try
+    {
+      return Cast::toOptFloatInclusive($value);
+    }
+    catch (InvalidCastException $exception)
+    {
+      throw self::createException($key, 'float inclusive', $value);
     }
   }
 
