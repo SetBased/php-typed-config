@@ -33,7 +33,7 @@ class TypedConfig
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Creates an exception with appropriate message.
+   * Creates an exception with the appropriate message.
    *
    * @param string $key   The key (in dot notation).
    * @param string $type  The expected type.

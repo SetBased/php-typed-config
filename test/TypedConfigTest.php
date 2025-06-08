@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace SetBased\Config\Test;
 
 use Noodlehaus\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SetBased\Config\TypedConfig;
 use SetBased\Config\TypedConfigException;
@@ -29,14 +30,15 @@ class TypedConfigTest extends TestCase
   private TypedConfig $typeConfig;
 
   //--------------------------------------------------------------------------------------------------------------------
+
   /**
    * Data provider for invalid mandatory arrays.
    *
    * @return array
    */
-  public function invalidManArrayCases(): array
+  public static function invalidManArrayCases(): array
   {
-    $cases = $this->invalidOptArrayCases();
+    $cases = TypedConfigTest::invalidOptArrayCases();
 
     $cases[] = ['null.array', null];
 
@@ -49,9 +51,9 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidManBoolCases(): array
+  public static function invalidManBoolCases(): array
   {
-    $cases = $this->invalidOptBoolCases();
+    $cases = TypedConfigTest::invalidOptBoolCases();
 
     $cases[] = ['null.bool', null];
 
@@ -64,9 +66,9 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidManFloatCases(): array
+  public static function invalidManFloatCases(): array
   {
-    $cases = $this->invalidOptCases();
+    $cases = TypedConfigTest::invalidOptCases();
 
     $cases[] = ['null.finite-float', null];
 
@@ -79,9 +81,9 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidManFloatInclusiveCases(): array
+  public static function invalidManFloatInclusiveCases(): array
   {
-    $cases = $this->invalidOptFloatInclusiveCases();
+    $cases = TypedConfigTest::invalidOptFloatInclusiveCases();
 
     $cases[] = ['null.float-inclusive', null];
 
@@ -94,9 +96,9 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidManIntCases(): array
+  public static function invalidManIntCases(): array
   {
-    $cases = $this->invalidOptIntCases();
+    $cases = TypedConfigTest::invalidOptIntCases();
 
     $cases[] = ['null.integer', null];
 
@@ -109,9 +111,9 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidManStringCases(): array
+  public static function invalidManStringCases(): array
   {
-    $cases = $this->invalidOptStringCases();
+    $cases = TypedConfigTest::invalidOptStringCases();
 
     $cases[] = ['null.string', null];
 
@@ -124,7 +126,7 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptArrayCases(): array
+  public static function invalidOptArrayCases(): array
   {
     return [['invalid.array', null]];
   }
@@ -135,7 +137,7 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptBoolCases(): array
+  public static function invalidOptBoolCases(): array
   {
     return [['invalid.bool', null]];
   }
@@ -146,7 +148,7 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptCases(): array
+  public static function invalidOptCases(): array
   {
     return [['invalid.finite-float', null]];
   }
@@ -157,7 +159,7 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptFloatInclusiveCases(): array
+  public static function invalidOptFloatInclusiveCases(): array
   {
     return [['invalid.float-inclusive', null]];
   }
@@ -168,7 +170,7 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptIntCases(): array
+  public static function invalidOptIntCases(): array
   {
     return [['invalid.integer', null]];
   }
@@ -179,9 +181,174 @@ class TypedConfigTest extends TestCase
    *
    * @return array
    */
-  public function invalidOptStringCases(): array
+  public static function invalidOptStringCases(): array
   {
     return [['invalid.string', null]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid mandatory arrays.
+   *
+   * @return array
+   */
+  public static function validManArrayCases(): array
+  {
+    return [['valid-array', null, ['one' => '1', 'two' => '2', 'three' => '3']],
+            ['null.array', [], []]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid mandatory booleans.
+   *
+   * @return array
+   */
+  public static function validManBoolCases(): array
+  {
+    return [['valid.bool', null, true],
+            ['null.bool', true, true]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid mandatory finite floats.
+   *
+   * @return array
+   */
+  public static function validManFloatCases(): array
+  {
+    return [['valid.finite-float', null, 3.14],
+            ['null.float-inclusive', 2.7, 2.7]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid mandatory floats including NaN, -INF, and INF.
+   *
+   * @return array
+   */
+  public static function validManFloatInclusiveCases(): array
+  {
+    $cases = TypedConfigTest::validManFloatCases();
+
+    $cases[] = ['valid.float-inclusive', null, INF];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid mandatory integers.
+   *
+   * @return array
+   */
+  public static function validManIntCases(): array
+  {
+    return [['valid.integer', null, 123],
+            ['null.integer', 456, 456]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid mandatory string.
+   *
+   * @return array
+   */
+  public static function validManStringCases(): array
+  {
+    return [['valid.string', null, 'Hello, world!'],
+            ['null.string', 'default', 'default']];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid optional arrays.
+   *
+   * @return array
+   */
+  public static function validOptArrayCases(): array
+  {
+    $cases = TypedConfigTest::validManArrayCases();
+
+    $cases[] = ['null.array', null, null];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid optional booleans.
+   *
+   * @return array
+   */
+  public static function validOptBoolCases(): array
+  {
+    $cases = TypedConfigTest::validManBoolCases();
+
+    $cases[] = ['null.bool', null, null];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid optional finite floats.
+   *
+   * @return array
+   */
+  public static function validOptFloatCases(): array
+  {
+    $cases = TypedConfigTest::validManFloatCases();
+
+    $cases[] = ['null.finite-float', null, null];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid optional floats including NaN, -INF, and INF.
+   *
+   * @return array
+   */
+  public static function validOptFloatInclusiveCases(): array
+  {
+    $cases = TypedConfigTest::validManFloatInclusiveCases();
+
+    $cases[] = ['null.float-inclusive', null, null];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid optional integers.
+   *
+   * @return array
+   */
+  public static function validOptIntCases(): array
+  {
+    $cases = TypedConfigTest::validManIntCases();
+
+    $cases[] = ['null.integer', null, null];
+
+    return $cases;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Data provider for valid optional string.
+   *
+   * @return array
+   */
+  public static function validOptStringCases(): array
+  {
+    $cases = TypedConfigTest::validManStringCases();
+
+    $cases[] = ['null.string', null, null];
+
+    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -206,13 +373,13 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test case for invalid mandatory array.
+   * Test case for an invalid mandatory array.
    *
    * @param string     $key     The key.
    * @param array|null $default The default value.
    *
-   * @dataProvider invalidManArrayCases
    */
+  #[DataProvider('invalidManArrayCases')]
   public function testInvalidArrayBool(string $key, ?array $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -225,9 +392,8 @@ class TypedConfigTest extends TestCase
    *
    * @param string    $key     The key.
    * @param bool|null $default The default value.
-   *
-   * @dataProvider invalidManBoolCases
    */
+  #[DataProvider('invalidManBoolCases')]
   public function testInvalidManBool(string $key, ?bool $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -241,8 +407,8 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidManFloatCases
    */
+  #[DataProvider('invalidManFloatCases')]
   public function testInvalidManFloat(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -256,8 +422,8 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidManFloatInclusiveCases
    */
+  #[DataProvider('invalidManFloatInclusiveCases')]
   public function testInvalidManFloatInclusive(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -271,8 +437,8 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidManIntCases
    */
+  #[DataProvider('invalidManIntCases')]
   public function testInvalidManInt(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -286,8 +452,8 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidManStringCases
    */
+  #[DataProvider('invalidManStringCases')]
   public function testInvalidManString(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -296,13 +462,13 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test case for invalid optional array.
+   * Test case for an invalid optional array.
    *
    * @param string     $key     The key.
    * @param array|null $default The default value.
    *
-   * @dataProvider invalidOptArrayCases
    */
+  #[DataProvider('invalidOptArrayCases')]
   public function testInvalidOptArray(string $key, ?array $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -316,8 +482,8 @@ class TypedConfigTest extends TestCase
    * @param string    $key     The key.
    * @param bool|null $default The default value.
    *
-   * @dataProvider invalidOptBoolCases
    */
+  #[DataProvider('invalidOptBoolCases')]
   public function testInvalidOptBool(string $key, ?bool $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -331,8 +497,8 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidOptCases
    */
+  #[DataProvider('invalidOptCases')]
   public function testInvalidOptFloat(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -346,8 +512,8 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidOptFloatInclusiveCases
    */
+  #[DataProvider('invalidOptFloatInclusiveCases')]
   public function testInvalidOptFloatInclusive(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -361,8 +527,8 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidOptIntCases
    */
+  #[DataProvider('invalidOptIntCases')]
   public function testInvalidOptInt(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -376,8 +542,8 @@ class TypedConfigTest extends TestCase
    * @param string   $key     The key.
    * @param int|null $default The default value.
    *
-   * @dataProvider invalidOptStringCases
    */
+  #[DataProvider('invalidOptStringCases')]
   public function testInvalidOptString(string $key, ?int $default): void
   {
     $this->expectException(TypedConfigException::class);
@@ -392,8 +558,8 @@ class TypedConfigTest extends TestCase
    * @param int|null $default  The default value.
    * @param int|null $expected The expected value.
    *
-   * @dataProvider validManIntCases
    */
+  #[DataProvider('validManIntCases')]
   public function testValidInt(string $key, ?int $default, ?int $expected): void
   {
     $value = $this->typeConfig->getManInt($key, $default);
@@ -402,14 +568,14 @@ class TypedConfigTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test case for mandatory array.
+   * Test case for a mandatory array.
    *
    * @param string     $key      The key.
    * @param array|null $default  The default value.
    * @param array|null $expected The expected value.
    *
-   * @dataProvider validManArrayCases
    */
+  #[DataProvider('validManArrayCases')]
   public function testValidManArray(string $key, ?array $default, ?array $expected): void
   {
     $value = $this->typeConfig->getManArray($key, $default);
@@ -424,8 +590,8 @@ class TypedConfigTest extends TestCase
    * @param bool|null $default  The default value.
    * @param bool|null $expected The expected value.
    *
-   * @dataProvider validManBoolCases
    */
+  #[DataProvider('validManBoolCases')]
   public function testValidManBool(string $key, ?bool $default, ?bool $expected): void
   {
     $value = $this->typeConfig->getManBool($key, $default);
@@ -440,8 +606,8 @@ class TypedConfigTest extends TestCase
    * @param float|null $default  The default value.
    * @param float|null $expected The expected value.
    *
-   * @dataProvider validManFloatCases
    */
+  #[DataProvider('validManFloatCases')]
   public function testValidManFloat(string $key, ?float $default, ?float $expected): void
   {
     $value = $this->typeConfig->getManFloat($key, $default);
@@ -456,8 +622,8 @@ class TypedConfigTest extends TestCase
    * @param float|null $default  The default value.
    * @param float|null $expected The expected value.
    *
-   * @dataProvider validManFloatInclusiveCases
    */
+  #[DataProvider('validManFloatInclusiveCases')]
   public function testValidManFloatInclusive(string $key, ?float $default, ?float $expected): void
   {
     $value = $this->typeConfig->getManFloatInclusive($key, $default);
@@ -472,8 +638,8 @@ class TypedConfigTest extends TestCase
    * @param array|null $default  The default value.
    * @param array|null $expected The expected value.
    *
-   * @dataProvider validOptArrayCases
    */
+  #[DataProvider('validOptArrayCases')]
   public function testValidOptArray(string $key, ?array $default, ?array $expected): void
   {
     $value = $this->typeConfig->getOptArray($key, $default);
@@ -488,8 +654,8 @@ class TypedConfigTest extends TestCase
    * @param bool|null $default  The default value.
    * @param bool|null $expected The expected value.
    *
-   * @dataProvider validOptBoolCases
    */
+  #[DataProvider('validOptBoolCases')]
   public function testValidOptBool(string $key, ?bool $default, ?bool $expected): void
   {
     $value = $this->typeConfig->getOptBool($key, $default);
@@ -504,8 +670,8 @@ class TypedConfigTest extends TestCase
    * @param float|null $default  The default value.
    * @param float|null $expected The expected value.
    *
-   * @dataProvider validOptFloatCases
    */
+  #[DataProvider('validOptFloatCases')]
   public function testValidOptFloat(string $key, ?float $default, ?float $expected): void
   {
     $value = $this->typeConfig->getOptFloat($key, $default);
@@ -520,8 +686,8 @@ class TypedConfigTest extends TestCase
    * @param float|null $default  The default value.
    * @param float|null $expected The expected value.
    *
-   * @dataProvider validOptFloatInclusiveCases
    */
+  #[DataProvider('validOptFloatInclusiveCases')]
   public function testValidOptFloatInclusive(string $key, ?float $default, ?float $expected): void
   {
     $value = $this->typeConfig->getOptFloatInclusive($key, $default);
@@ -536,8 +702,8 @@ class TypedConfigTest extends TestCase
    * @param int|null $default  The default value.
    * @param int|null $expected The expected value.
    *
-   * @dataProvider validOptIntCases
    */
+  #[DataProvider('validOptIntCases')]
   public function testValidOptInt(string $key, ?int $default, ?int $expected): void
   {
     $value = $this->typeConfig->getOptInt($key, $default);
@@ -552,8 +718,8 @@ class TypedConfigTest extends TestCase
    * @param string|null $default  The default value.
    * @param string|null $expected The expected value.
    *
-   * @dataProvider validOptStringCases
    */
+  #[DataProvider('validOptStringCases')]
   public function testValidOptString(string $key, ?string $default, ?string $expected): void
   {
     $value = $this->typeConfig->getOptString($key, $default);
@@ -568,177 +734,12 @@ class TypedConfigTest extends TestCase
    * @param string|null $default  The default value.
    * @param string|null $expected The expected value.
    *
-   * @dataProvider validManStringCases
    */
+  #[DataProvider('validManStringCases')]
   public function testValidString(string $key, ?string $default, ?string $expected): void
   {
     $value = $this->typeConfig->getManString($key, $default);
     self::assertSame($value, $expected);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid mandatory arrays.
-   *
-   * @return array
-   */
-  public function validManArrayCases(): array
-  {
-    return [['valid-array', null, ['one' => '1', 'two' => '2', 'three' => '3']],
-            ['null.array', [], []]];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid mandatory booleans.
-   *
-   * @return array
-   */
-  public function validManBoolCases(): array
-  {
-    return [['valid.bool', null, true],
-            ['null.bool', true, true]];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid mandatory finite floats.
-   *
-   * @return array
-   */
-  public function validManFloatCases(): array
-  {
-    return [['valid.finite-float', null, 3.14],
-            ['null.float-inclusive', 2.7, 2.7]];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid mandatory floats including NaN, -INF, and INF.
-   *
-   * @return array
-   */
-  public function validManFloatInclusiveCases(): array
-  {
-    $cases = $this->validManFloatCases();
-
-    $cases[] = ['valid.float-inclusive', null, INF];
-
-    return $cases;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid mandatory integers.
-   *
-   * @return array
-   */
-  public function validManIntCases(): array
-  {
-    return [['valid.integer', null, 123],
-            ['null.integer', 456, 456]];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid mandatory string.
-   *
-   * @return array
-   */
-  public function validManStringCases(): array
-  {
-    return [['valid.string', null, 'Hello, world!'],
-            ['null.string', 'default', 'default']];
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid optional arrays.
-   *
-   * @return array
-   */
-  public function validOptArrayCases(): array
-  {
-    $cases = $this->validManArrayCases();
-
-    $cases[] = ['null.array', null, null];
-
-    return $cases;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid optional booleans.
-   *
-   * @return array
-   */
-  public function validOptBoolCases(): array
-  {
-    $cases = $this->validManBoolCases();
-
-    $cases[] = ['null.bool', null, null];
-
-    return $cases;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid optional finite floats.
-   *
-   * @return array
-   */
-  public function validOptFloatCases(): array
-  {
-    $cases = $this->validManFloatCases();
-
-    $cases[] = ['null.finite-float', null, null];
-
-    return $cases;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid optional floats including NaN, -INF, and INF.
-   *
-   * @return array
-   */
-  public function validOptFloatInclusiveCases(): array
-  {
-    $cases = $this->validManFloatInclusiveCases();
-
-    $cases[] = ['null.float-inclusive', null, null];
-
-    return $cases;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid optional integers.
-   *
-   * @return array
-   */
-  public function validOptIntCases(): array
-  {
-    $cases = $this->validManIntCases();
-
-    $cases[] = ['null.integer', null, null];
-
-    return $cases;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Data provider for valid optional string.
-   *
-   * @return array
-   */
-  public function validOptStringCases(): array
-  {
-    $cases = $this->validManStringCases();
-
-    $cases[] = ['null.string', null, null];
-
-    return $cases;
   }
 
   //--------------------------------------------------------------------------------------------------------------------

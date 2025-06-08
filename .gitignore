@@ -3,8 +3,6 @@
 /bin/
 /build/
 /composer.lock
-/custom.task.properties
-/custom.type.properties
 /doc/
 /test/MySql/etc/routines.json
 /test/MySql/etc/stratum.cfg
